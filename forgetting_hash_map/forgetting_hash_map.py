@@ -1,6 +1,7 @@
 class ForgettingHash:
     """A fixed size hash that deletes the least used elements when full
 
+    Uses a second dict with the same keys to record usage
     Value is refereed to as 'content'
     """
 
@@ -14,7 +15,7 @@ class ForgettingHash:
             raise ValueError('There are more items ({}) given then the max_len ({})'.format(len(items), max_len))
 
         self._map = dict(items)
-        # this shows the usage of a key
+        # Create a second dict to record the usage of the the main hashable
         self._popularity = dict.fromkeys(items.keys(), 0)
 
     def add(self, key, content=None):
@@ -32,7 +33,10 @@ class ForgettingHash:
         self._popularity[key] = 0
 
     def find(self, key):
-        """gets the value of a key from the map"""
+        """Gets the value of a key from the map.
+
+         Returns None if key does not exist
+         """
         content = self._map.get(key, None)
         if content:
             self._popularity[key] += 1
