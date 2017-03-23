@@ -18,7 +18,8 @@ class TestForgettingHash(TestCase):
 
         # invalid use
         self.assertRaises(ValueError, ForgettingHash, -1)
-        self.assertRaises(ValueError, ForgettingHash, 0, {'one': 1})
+        self.assertRaises(ValueError, ForgettingHash, 0)
+        self.assertRaises(ValueError, ForgettingHash, 1, {'one': 1, 'two': 1})
 
     def test_find(self):
         self.assertEquals(self.fh._popularity['one'], 1)
@@ -29,6 +30,10 @@ class TestForgettingHash(TestCase):
         self.assertEquals(self.fh.find('two'), 'bar')
 
     def test_add(self):
+        test_add = ForgettingHash(1)
+        test_add.add('one', 1)
+        test_add.add('two', 2)
+
         #check for noop when content is the same
         self.fh.add('one', 'foo')
         self.assertEquals(self.fh._popularity['one'], 1)
@@ -43,3 +48,9 @@ class TestForgettingHash(TestCase):
         self.assertEquals(self.fh._popularity['three'], 0)
         self.assertEquals(self.fh._map['three'], 'foobar')
         self.assertFalse('one' in self.fh._map)
+
+    def test_delete(self):
+        empty = ForgettingHash(2)
+
+        # test that min is not run on an empty dict (else an error is thrown)
+        empty.delete_least_used()
