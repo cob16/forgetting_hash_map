@@ -1,0 +1,35 @@
+{
+  "name": "forgetting-map",
+  "version": "1.0.0",
+  "description": "a forgetting map, kind of like Dory",
+  "main": "forgettingMap.js",
+  "scripts": {
+    "ci": "node --version && npm --version && npm install && npm test",
+    "test": "npm run lint && npm run coverage && npm run doc",
+    "lint": "./node_modules/.bin/eslint unix -c .eslintrc.json .",
+    "jasmine": "./node_modules/.bin/jasmine",
+    "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/jasmine/bin/jasmine.js",
+    "clean": "rm -rf ./docs/ ./coverage/",
+    "clean-all": "npm run clean && rm -rf ./node_modules/"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-stage-0": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "eslint": "^3.15.0",
+    "eslint-config-google": "^0.7.1",
+    "istanbul": "v1.1.0-alpha.1",
+    "jasmine": "^2.5.3",
+    "jasmine-reporters": "^2.2.0",
+    "jasmine-spec-reporter": "^3.2.0",
+    "jsdoc": "^3.4.3",
+    "jsdoc-babel": "^0.3.0",
+    "mock-fs": "^4.2.0"
+  }
+}
