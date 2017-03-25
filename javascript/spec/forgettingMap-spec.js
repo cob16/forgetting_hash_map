@@ -144,6 +144,71 @@ describe('Forgetting Map', () => {
 
     });
 
+    it('should use the default decider which evicts the first key found', () => {
+
+      let fm = new ForgettingMap(2);
+
+      fm.addItem('first', 'awesome');
+      fm.addItem('second', 'brilliant');
+
+      expect(fm.removeLeastUsed()).toEqual(jasmine.objectContaining({
+        key: 'first',
+        value: 'awesome',
+        findCount: 0
+      }));
+
+    });
+
+    it('should use the decider to remove keys with equal usage', () => {
+
+      let fm = new ForgettingMap(2);
+
+      fm.addItem('first', 'awesome');
+      fm.addItem('second', 'brilliant');
+
+      fm.setDecider((items) => {
+        expect(Array.isArray(items)).toBe(true);
+
+        return 'second';
+      });
+
+      expect(fm.removeLeastUsed()).toEqual(jasmine.objectContaining({
+        key: 'second',
+        value: 'brilliant',
+        findCount: 0
+      }));
+    });
+
+    it('should evict the first item if the decider can\'t decide', () => {
+
+      let fm = new ForgettingMap(2);
+
+      fm.addItem('first', 'awesome');
+      fm.addItem('second', 'brilliant');
+
+      fm.setDecider((items) => undefined);
+
+      expect(fm.removeLeastUsed()).toEqual(jasmine.objectContaining({
+        key: 'first',
+        value: 'awesome',
+        findCount: 0
+      }));
+
+      fm = new ForgettingMap(2);
+
+      fm.addItem('first', 'awesome');
+      fm.addItem('second', 'brilliant');
+
+      fm.setDecider((items) => 'nonExistantKey');
+
+      expect(fm.removeLeastUsed()).toEqual(jasmine.objectContaining({
+        key: 'first',
+        value: 'awesome',
+        findCount: 0
+      }));
+
+    });
+
   });
 
 });

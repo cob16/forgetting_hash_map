@@ -39,6 +39,8 @@ export default class ForgettingMap {
         this.addItem(key, initialItems[key]);
       });
     }
+
+    this.setDecider();
   }
 
   addItem(key, value) {
@@ -94,19 +96,36 @@ export default class ForgettingMap {
 
   removeLeastUsed() {
 
-    let leastUsedKey;
+    let leastUsed = [];
     let leastUsedKeyCount = Infinity;
 
     Object.keys(this.keyCountMap).forEach((key) => {
       if (this.keyCountMap[key] < leastUsedKeyCount) {
         leastUsedKeyCount = this.keyCountMap[key];
-        leastUsedKey = key;
+        leastUsed = [{
+          key,
+          value: this.keyValueMap[key],
+          findCount: leastUsedKeyCount
+        }];
+      } else if (this.keyCountMap[key] === leastUsedKeyCount) {
+        leastUsed.push(key);
       }
     });
 
-    if (leastUsedKey) {
-      return this.removeItem(leastUsedKey);
-    }
+    if (leastUsed.length === 1) {
+      return this.removeItem(leastUsed[0].key);
+    } else if (leastUsed.length > 1) {
+      let evictKey = this.decider(leastUsed);
 
+      if (!this.keyValueMap.hasOwnProperty(evictKey)) {
+        evictKey = leastUsed[0].key;
+      }
+
+      return this.removeItem(evictKey);
+    }
+  }
+
+  setDecider(lambda) {
+    this.decider = lambda || ((items) => items[0].key);
   }
 }

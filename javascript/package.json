@@ -2,7 +2,7 @@
   "name": "forgetting-map",
   "version": "1.0.0",
   "description": "a forgetting map, kind of like Dory",
-  "main": "forgettingMap.js",
+  "main": "src/forgettingMap.js",
   "scripts": {
     "ci": "node --version && npm --version && npm install && npm test",
     "test": "npm run lint && npm run coverage && npm run doc",
